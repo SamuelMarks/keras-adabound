@@ -10,13 +10,11 @@ https://arxiv.org/pdf/1603.05027.pdf
 """
 
 from __future__ import print_function
-import keras
-from keras.layers import Dense, Conv2D, BatchNormalization, Activation
-from keras.layers import GlobalAveragePooling2D, Input, Flatten
-from keras.regularizers import l2
-from keras.models import Model
 
-
+from tensorflow.python.keras.layers import Dense, Conv2D, BatchNormalization, Activation, add
+from tensorflow.python.keras.layers import GlobalAveragePooling2D, Input
+from tensorflow.python.keras.regularizers import l2
+from tensorflow.python.keras.models import Model
 
 
 def resnet_layer(inputs,
@@ -118,7 +116,7 @@ def resnet_v1(input_shape, depth, num_classes=10, num_res_blocks=None):
                                  strides=strides,
                                  activation=None,
                                  batch_normalization=False)
-            x = keras.layers.add([x, y])
+            x = add([x, y])
             x = Activation('relu')(x)
         num_filters *= 2
 

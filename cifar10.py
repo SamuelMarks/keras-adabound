@@ -1,13 +1,10 @@
-
-import numpy as np
 import os
+import numpy as np
 
-import keras
-from keras.datasets import cifar10
-from keras.preprocessing.image import ImageDataGenerator
-from keras.callbacks import (ModelCheckpoint,
-                             LearningRateScheduler,
-                             TensorBoard)
+from tensorflow.python.keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard
+from tensorflow.python.keras.datasets import cifar10
+from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.python.keras.utils import to_categorical
 
 from resnet import ResNet18, ResNet34
 from adabound import AdaBound
@@ -71,8 +68,8 @@ print(x_test.shape[0], 'test samples')
 print('y_train shape:', y_train.shape)
 
 # Convert class vectors to binary class matrices.
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
+y_train = to_categorical(y_train, num_classes)
+y_test = to_categorical(y_test, num_classes)
 
 
 def lr_schedule(epoch):
@@ -131,7 +128,7 @@ checkpoint = ModelCheckpoint(filepath=filepath,
 lr_scheduler = LearningRateScheduler(lr_schedule)
 
 
-log_path = 'logs/%s' % (model_name[:-3])
+log_path = os.path.join('logs', model_name[:-3])
 tensorboard = TensorBoard(log_path, update_freq='batch')
 
 callbacks = [checkpoint, lr_scheduler, tensorboard]
