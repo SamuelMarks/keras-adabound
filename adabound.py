@@ -66,8 +66,7 @@ class AdaBound(Optimizer):
         t = K.cast(self.iterations, K.floatx()) + 1
 
         # Applies bounds on actual learning rate
-        step_size = lr * (K.sqrt(1. - K.pow(self.beta_2, t)) /
-                          (1. - K.pow(self.beta_1, t)))
+        step_size = lr * (K.sqrt(1. - K.pow(self.beta_2, t)) / (1. - K.pow(self.beta_1, t)))
 
         final_lr = self.final_lr * lr / self.base_lr
         lower_bound = final_lr * (1. - 1. / (self.gamma * t + 1.))
@@ -86,15 +85,15 @@ class AdaBound(Optimizer):
             if self.weight_decay != 0.:
                 g += self.weight_decay * K.stop_gradient(p)
 
-            m_t = (self.beta_1 * m) + (1. - self.beta_1) * g
-            v_t = (self.beta_2 * v) + (1. - self.beta_2) * K.square(g)
+            m_t = self.beta_1 * m + (1. - self.beta_1) * g
+            v_t = self.beta_2 * v + (1. - self.beta_2) * K.square(g)
 
             if self.amsbound:
                 vhat_t = K.maximum(vhat, v_t)
-                denom = (K.sqrt(vhat_t) + self.epsilon)
+                denom = K.sqrt(vhat_t) + self.epsilon
                 self.updates.append(K.update(vhat, vhat_t))
             else:
-                denom = (K.sqrt(v_t) + self.epsilon)
+                denom = K.sqrt(v_t) + self.epsilon
 
             # Compute the bounds
             step_size_p = step_size * K.ones_like(denom)

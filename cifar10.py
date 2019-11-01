@@ -1,6 +1,6 @@
 import os
-import numpy as np
 
+import tensorflow as tf
 from tensorflow.python.keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard
 from tensorflow.python.keras.datasets import cifar10
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
@@ -58,7 +58,9 @@ x_test = x_test.astype('float32') / 255.
 
 # If subtract pixel mean is enabled
 if subtract_pixel_mean:
-    x_train_mean = np.mean(x_train, axis=0)
+    x_train_mean_op = tf.reduce_mean(x_train, axis=0)
+    with tf.Session() as sess:
+        x_train_mean = sess.run(x_train_mean_op)
     x_train -= x_train_mean
     x_test -= x_train_mean
 
@@ -96,6 +98,7 @@ def lr_schedule(epoch):
     print('Learning rate: ', lr)
     return lr
 
+
 if n == 18:
     model = ResNet18(input_shape=input_shape, depth=depth)
 else:
@@ -126,7 +129,6 @@ checkpoint = ModelCheckpoint(filepath=filepath,
                              save_weights_only=True)
 
 lr_scheduler = LearningRateScheduler(lr_schedule)
-
 
 log_path = os.path.join('logs', model_name[:-3])
 tensorboard = TensorBoard(log_path, update_freq='batch')

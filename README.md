@@ -49,5 +49,5 @@ Weights are available inside the [Releases tab](https://github.com/titu1994/kera
 <img src="https://github.com/titu1994/keras-adabound/blob/master/images/val_loss.PNG?raw=true" height=50% width=100%>
 
 # Requirements
-- Keras 2.2.4+ & Tensorflow 1.12+ (Only supports TF backend for now).
+- TensorFlow 1.12+ (Only supports TF backend for now).
 - Numpy
