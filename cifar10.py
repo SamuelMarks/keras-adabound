@@ -1,6 +1,7 @@
 import os
 
 import tensorflow as tf
+from tensorflow.python.keras import backend as K
 from tensorflow.python.keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard
 from tensorflow.python.keras.datasets import cifar10
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
@@ -58,9 +59,7 @@ x_test = x_test.astype('float32') / 255.
 
 # If subtract pixel mean is enabled
 if subtract_pixel_mean:
-    x_train_mean_op = tf.reduce_mean(x_train, axis=0)
-    with tf.Session() as sess:
-        x_train_mean = sess.run(x_train_mean_op)
+    x_train_mean = K.mean(x_train, axis=0)
     x_train -= x_train_mean
     x_test -= x_train_mean
 
